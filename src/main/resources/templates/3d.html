@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css}" />
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+    <style type="text/css">
+        ul li img{
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+<div id="3dEdit">
+
+    <div name="models" style="position:absolute;z-index: 3;width: 100%">
+        <ul class="list-unstyled" style="float: right;">
+            <!--摄像头-->
+            <li id="model1" style="margin:1%" attr-url="http://model.3dmomoda.cn/models/2DBD1DCD7B5F49BDA43CC6444FC5CBD0/0/gltf">
+                <img src="http://model.3dmomoda.cn/models/2DBD1DCD7B5F49BDA43CC6444FC5CBD0/5/screenshot.jpg" />
+            </li>
+            <!--网络柜-->
+            <li id="model2" style="margin:1%" attr-url="http://model.3dmomoda.cn/models/6BF8CF7593EE42C4836BB96D093BDFC6/0/gltf/">
+                <img src="http://model.3dmomoda.cn/models/6BF8CF7593EE42C4836BB96D093BDFC6/8/screenshot.jpg" />
+            </li>
+            <!--机柜-->
+            <li id="model3" style="margin:1%" attr-url="http://model.3dmomoda.cn/models/47f34ce2c5a14b6d8fd4e80974394a55/0/gltf/">
+                <img src="http://model.3dmomoda.cn/models/47f34ce2c5a14b6d8fd4e80974394a55/3/screenshot.jpg" />
+            </li>
+
+            <!--存储-->
+            <li id="model4" style="margin:1%" attr-url="http://model.3dmomoda.cn/models/58676E2C943D451885531A29D03664C1/0/gltf/">
+                <img src="http://model.3dmomoda.cn/models/58676E2C943D451885531A29D03664C1/6/screenshot.jpg" />
+            </li>
+        </ul>
+    </div>
+
+</div>
+<script>
+
+
+    app=new THING.App({
+        container: '3dEdit',
+        url:'./scene',
+    })
+    app.on('load', function (ev) {
+        app.level.change(ev.campus);
+
+        dragIcon('model1',dragStart);
+        dragIcon('model2',dragStart);
+        dragIcon('model3',dragStart);
+        dragIcon('model4',dragStart);
+
+    });
+
+    app.pauseEvent(THING.EventType.Click,'*',THING.EventTag.LevelBackMethod);
+    app.on(THING.EventType.DBLClick,function(ev){
+        if(ev.button!=2){
+            return;
+        }
+        app.level.back();
+    });
+
+    //创建物体并开始拖动
+    function dragStart(url,x,y) {
+
+        //创建物体
+        newModel=app.create({
+            type:'Thing',
+            url,
+            position:app.camera.screenToWorld(x,y)
+        });
+        //防止拖动过程中获取时间坐标的时候，对位置进行重复拾取
+        newModel.pickable=false;
+
+        //关闭摄像机转动
+        app.camera.enableRotate=false;
+
+    }
+
+    //关联拖动图标
+    function dragIcon(id,callback1) {
+        var dom=document.getElementById(id);
+        var url=dom.getAttribute('attr-url');
+        dom.onmousedown=function (e) {
+            callback1(url,e.pageX,e.pageY);
+        }
+    }
+
+    var newModel=null;
+
+    //物体跟随鼠标移动
+    app.on('mousemove',function (ev) {
+        if(newModel){
+            var worldPosition = app.picker.pickWorldPosition(ev.clientX,ev.clientY);
+            if(!worldPosition){
+                worldPosition=app.camera.screenToWorld(ev.clientX,ev.clientY);
+            }
+
+            newModel.position=worldPosition;
+        }
+    })
+
+    //鼠标抬起时取消物体移动
+    app.on('mouseup',function (ev) {
+        if(newModel){
+
+            //重新让物体开启拾取
+            newModel.pickable=true;
+
+            //点击物体可以开启/关闭控制轴
+            newModel.on('singleclick',function (ev) {
+                var object=ev.object;
+                if(object.hasControl('axisControl')){
+                    object.removeControl('axisControl');
+                }else{
+                    object.addControl(new THING.AxisTransformControl(object),'axisControl')
+                }
+
+                app.query('.Thing').not(object).forEach(function (object) {
+                    object.removeControl('axisControl');
+                })
+            })
+
+            //触发点击事件来给物体添加控制轴
+            newModel.trigger('singleclick');
+
+            newModel=null;
+        }
+
+        app.camera.enableRotate=true;
+    })
+
+
+
+    // 鼠标右键点击取消所有控制轴
+    app.on('mousedown', function (ev) {
+        if (ev.button == 2) {
+            app.query('.Thing').forEach(function (object) {
+                object.removeControl('axisControl');
+            });
+        }
+    });
+
+</script>
+</body>
+</html>

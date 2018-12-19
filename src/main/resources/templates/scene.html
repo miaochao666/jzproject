@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css}" />
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+</head>
+<body style="background-color: whitesmoke" th:fragment="scene">
+<header style="width: 100%;overflow: hidden">
+    <img th:src="@{/img/logo2x.png}" alt="" style="float: left;" height="50px">
+    <div style="float: right;line-height: 50px;margin-right: 2%">
+        <ul class="nav nav-tabs" id="list" style="overflow: hidden">
+            <li role="presentation" class="active"><a href="/scene">基站模板</a></li>
+            <li role="presentation"><a href="/sceneIncludeModel">基站场景</a></li>
+            <li role="presentation"><a href="#">进入3D</a></li>
+        </ul>
+    </div>
+</header>
+    <h2 style="margin-left: 5%">基站模板<small>可复制新基站场景</small></h2>
+    <div style="overflow: hidden">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for...">
+        <span class="input-group-btn">
+            <button class="btn btn-info" type="button">搜索</button>
+        </span>
+    </div>
+    </div>
+    <div class="col-lg-3"></div>
+    </div>
+    <div id="main" style="width: 100%;padding: 5% 2%">
+
+        <div class="col-lg-2" style="padding: 0.5%">
+            <div style="background-color: white;padding: 2%">
+                <img th:src="@{/scene/scene2/preview.jpg}" alt="" width="100%">
+                <span id="scene2" class="badge"></span>
+                <h3>宏基站</h3>
+                <h4>宏基站</h4>
+                <button type="button" class="btn btn-primary" onclick="preview('scene2');">预览</button>
+                <button type="button" class="btn btn-default" onclick="copyScene('宏基站','scene2');">复制新基站</button>
+            </div>
+        </div>
+        <div class="col-lg-2" style="padding: 0.5%">
+            <div style="background-color: white;padding: 2%">
+                <img th:src="@{/scene/scene1/preview.jpg}" alt="" width="100%">
+                <span id="scene1" class="badge"></span>
+                <h3>微基站</h3>
+                <h4>微基站</h4>
+                <button type="button" class="btn btn-primary" onclick="preview('scene1');">预览</button>
+                <button type="button" class="btn btn-default" onclick="copyScene('微基站','scene1');">复制新基站</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        function preview(scene){
+            $("#3d").html("");
+            app=new THING.App({
+                container: '3d',
+                url:'/scene/'+scene,
+            })
+            $("#preview").modal("show");
+            app.on('load', function (ev) {
+                app.level.change(ev.campus);
+            });
+        }
+
+
+
+        function copyScene(name,source){
+
+            $("#sceneFrom").val(name);
+            $("#sceneSource").val(source);
+
+            $("#copy").modal("show");
+        }
+
+        function  submitScene() {
+
+            $.ajax({
+                url:'/addScene',
+                data:$("#submitForm").serialize(),
+                dataType:'text',
+                type:'post',
+                success:function (result) {
+                    alert(result);
+                    $("#copy").modal("hide");
+                }
+
+            })
+
+        }
+
+        $(document).ready(function () {
+            countNum("scene2");
+            countNum("scene1");
+            function countNum(id) {
+                $.ajax({
+                    url:'/count',
+                    data:'sceneSource='+id,
+                    type:'post',
+                    dataType:'text',
+                    success:function (result) {
+
+                        $("#"+id).html(result);
+
+                    }
+                })
+            }
+        })
+    </script>
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="preview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">预览场景</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="3d" style="width: 570px;height: 570px">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="copy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">复制新场景</h4>
+                </div>
+                <form id="submitForm">
+                <div class="modal-body" style="margin: 2%">
+                    <label>引用模板</label>
+                    <input id="sceneFrom" name="sceneFrom" type="text" class="form-control" disabled>
+                    <label>场景名称</label>
+                    <input id="sceneName" name="sceneName" type="text" class="form-control">
+                    <label>场景描述</label>
+                    <input id="sceneDescribe" name="sceneDescribe" type="text" class="form-control">
+                    <input id="sceneSource" name="sceneSource" type="text" class="form-control" style="display: none">
+                </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitScene();">Save changes</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script></script>
+
+
+
+</body>
+</html>

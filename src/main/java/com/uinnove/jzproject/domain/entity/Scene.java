@@ -3,10 +3,7 @@ package com.uinnove.jzproject.domain.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -17,7 +14,8 @@ public class Scene {
      * 主键id
      */
     @Id
-    private String sceneId;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer sceneId;
 
     /**
      * 名称

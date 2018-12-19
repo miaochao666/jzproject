@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css}" />
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6p6A02RW5Z9hSH4lZp5QGkXrYrns19H5"></script>
+
+</head>
+<body style="background-color: whitesmoke" th:fragment="sceneIncludeModel">
+<header style="width: 100%;overflow: hidden">
+    <img th:src="@{/img/logo2x.png}" alt="" style="float: left;" height="50px">
+    <div style="float: right;line-height: 50px;margin-right: 2%">
+        <ul class="nav nav-tabs" id="list" style="overflow: hidden">
+            <li role="presentation"><a href="/scene">基站模板</a></li>
+            <li role="presentation" class="active"><a href="/sceneIncludeModel">基站场景</a></li>
+            <li role="presentation"><a href="#">进入3D</a></li>
+        </ul>
+    </div>
+</header>
+<h2 style="margin-left: 5%">基站场景<small>基站真实模型</small></h2>
+<div style="overflow: hidden">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+            <button class="btn btn-info" type="button">搜索</button>
+        </span>
+        </div>
+    </div>
+    <div class="col-lg-3"></div>
+
+    <div  id="main" style="width: 100%;padding: 5% 2%;">
+
+        <div th:each="scene,sceneStat:${list}" class="col-lg-2" style="padding: 0.5%;">
+            <div style="background-color: white;padding: 2%">
+                <img th:src="@{${scene.sceneImg}}" alt="" width="100%">
+                <span th:if="${scene.longitude}!=null">
+                    <span class="badge">已设置</span>
+                </span>
+                <span th:if="${scene.longitude}==null">
+                    <span class="badge">未设置</span>
+                </span>
+
+                <h3 th:text="${scene.sceneName}"></h3>
+                <h4 th:text="${scene.sceneDescribe}"></h4>
+                <button type="button" class="btn btn-primary" th:onclick="preview([[${scene.sceneSource}]])" style="font-size: 12px">预览</button>
+                <button type="button" class="btn btn-success" th:onclick="setpoints([[${scene.longitude}]],[[${scene.latitude}]],[[${scene.sceneId}]])" style="font-size: 12px">设置位置</button>
+                <button type="button" class="btn btn-default" onclick="window.open('3d.html')" style="font-size: 12px">编辑</button>
+                <button type="button" class="btn btn-danger" onclick="del();" style="font-size: 12px">删除</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script th:inline="javascript">
+
+
+        function preview(source) {
+
+
+            app=new THING.App({
+                container: '3d',
+                url:'./scene/'+source,
+            })
+            $("#preview").modal("show");
+            app.on('load', function (ev) {
+                app.level.change(ev.campus);
+            });
+        }
+
+
+        
+        function setpoints(a,b,id) {
+
+
+
+            $("#setLocation").modal("show");
+            // 百度地图API功能
+            var map = new BMap.Map("allmap",{enableMapClick: false});    // 创建Map实例
+
+            if(a!=null && b!=null){
+                debugger
+                map.centerAndZoom(new BMap.Point(parseFloat(a), parseFloat(b)), 15);
+                marker = new BMap.Marker(new BMap.Point(parseFloat(a), parseFloat(b))); // 创建点
+                map.addOverlay(marker);
+            }else{
+                debugger
+                map.centerAndZoom(new BMap.Point(116.404, 39.915), 15);  // 初始化地图,设置中心点坐标和地图级别
+            }
+
+            /*map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的*/
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+            map.panBy(500,380)
+
+            var ing;
+            var preIng;
+            var lat;
+            var preLat;
+            map.addEventListener("rightclick",function (e) {
+                ing=e.point.lng;
+                lat=e.point.lat;
+                if(preIng==ing && preLat==lat){
+                    return;
+                }else{
+                    var allOverlay = map.getOverlays();
+                    for (var i = 0; i < allOverlay.length; i++){
+                            map.removeOverlay(allOverlay[i]);
+                    }
+                marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
+                map.addOverlay(marker);
+                    preIng=ing;
+                    preLat=lat;
+                }
+            })
+
+            //定义一个控件类，即function
+            function ZoomControl(ing,lat) {
+                this.defaultAnchor = BMAP_ANCHOR_TOP_RIGHT;
+                this.defaultOffset = new BMap.Size(10,10);
+            }
+            // 通过JavaScript的prototype属性继承于BMap.Control
+            ZoomControl.prototype=new BMap.Control();
+
+            // 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
+            // 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
+            ZoomControl.prototype.initialize = function(map){
+                // 创建一个DOM元素
+                var div=document.createElement("button")
+                // 添加文字说明
+                div.appendChild(document.createTextNode("保存当前位置"));
+
+                div.onclick=function(){
+                    //alert(ing+','+lat+','+id);
+                    $.ajax({
+                        url:'/savePoint',
+                        data:'sceneId='+id+'&longitude='+ing+'&latitude='+lat,
+                        dataType:'text',
+                        type:'post',
+                        success:function (result) {
+                            location.reload();
+                        }
+                    })
+
+                }
+                // 添加DOM元素到地图中
+                map.getContainer().appendChild(div);
+                return div;
+            }
+
+            // 创建控件
+            var myZoomCtrl = new ZoomControl(ing,lat);
+            // 添加到地图当中
+            map.addControl(myZoomCtrl);
+
+        }
+
+
+
+        
+        function del() {
+            $("#delete").modal("show");
+        }
+    </script>
+
+
+
+    <!-- Modal 预览-->
+    <div class="modal fade" id="preview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">预览</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="3d" style="width: 570px;height: 570px">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal 设置位置-->
+    <div class="modal fade" id="setLocation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 1000px;">
+            <div class="modal-content" style="height: 760px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">设置位置</h4>
+                </div>
+
+                <div id="allmap" class="modal-body" style="width: 100%;height: 100%;">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal 删除-->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel4">删除场景</h4>
+                </div>
+
+                <div class="modal-body" style="margin: 2%">
+                    是否删除此场景
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitScene();">OK</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
