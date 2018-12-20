@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+
+	<script src="/static/js/thingjs.min-v1.2.2.4.js"></script>
+	<script src="/static/js/thing.widget.min.js"></script>
+	<script src="/static/js/jquery.min.js"></script>
+
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		.icon icon1 main {
+			top: 130px;
+			right: 0;
+			display: block;
+			width: 70px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="3d">
+
+	</div>
+</body>
+<script>
+	const CABINET_DEFAULT_UNITCOUNT = 42; // 默认机柜u数
+	const RACK_UNIT_HEIGHT = 0.0445; // 1u为4.3厘米
+	const BarGraphColors = ['#0000ff', '#00ffff', '#00ff00', '#ff0000', '#ff00ff', '#ffff00'];
+	const RackModels = [
+		['http://model.3dmomoda.cn/models/3817338017ff4776a5dd05f03a3e2fd4/0/gltf', 1],
+		['http://model.3dmomoda.cn/models/37972dd2c96c4a37a3245a00bee3628b/0/gltf', 2]
+	];
+	var app = new THING.App({
+		container: '3d',
+		url: '/static/scene',
+
+	});
+
+
+	var showBar = true;
+	var _thingUI = {},
+		_selectCabinet;
+	var toolBar;
+	var _thingStation = {},
+		_selectCabinet;
+	var _rackUI = {},
+		_selectRack;
+
+
+
+	app.on('load', function (ev) {
+		var floor = app.query('新楼层')[0];
+		app.level.change(floor);
+		app.pauseEvent(THING.EventType.Click, '*', THING.EventTag.LevelBackMethod);
+		app.on(THING.EventType.DBLClick, function (ev) {
+			if (ev.button != 2) {
+				return;
+			}
+			app.level.back();
+		}, 'customLevelBackMethod');
+
+		init_UI();
+
+		show_UI();
+
+		init_cabinets();
+	});
+
+	//-----------------------------------------------------------------------------------------
+	//建立UI界面
+	function init_UI() {
+		toolBar = new THING.widget.ToolBar({
+			width: '70px',
+			position: [130, 1830]
+		});
+		toolBar.data = {
+			zoneCount: false,
+			video: false,
+			doHuan: false,
+			weight: false,
+			treasure: false
+		};
+		var img0 = toolBar.addImageBoolean(toolBar.data, 'zoneCount').caption('空间统计').imgUrl('./img/statistics.png');
+		var img1 = toolBar.addImageBoolean(toolBar.data, 'video').caption('视频监控').imgUrl('./img/video.png');
+		var img2 = toolBar.addImageBoolean(toolBar.data, 'doHuan').caption('动环').imgUrl('./img/temperature.png');
+		var img3 = toolBar.addImageBoolean(toolBar.data, 'weight').caption('承重统计').imgUrl('./img/humidity.png');
+		var img4 = toolBar.addImageBoolean(toolBar.data, 'treasure').caption('资产').imgUrl('./img/cereals_reserves.png');
+
+		img0.on('change', function (a) {
+
+			app.query('.Thing').forEach(function (obj) {
+				showBarGraph(showBar, obj);
+			});
+			showBar = !showBar;
+		});
+	}
+
+
+	//-----------------------------------------------------------------------------------------
+	//创建柱状图
+	function createBarGraph(obj) {
+		box = app.create({
+			type: 'Box',
+			width: obj.boundingBox.size[0] * 0.9,
+			height: obj.boundingBox.size[1],
+			depth: obj.boundingBox.size[2] * 0.9,
+			position: obj.position,
+			center: 'Bottom'
+		});
+	}
+	//加载柱状图
+	function showBarGraph(showBar, obj) {
+		if (showBar) {
+			createBarGraph(obj);
+			obj.visible = false;
+			box.visible = true;
+			box.style.color = Math.randomFromArray(BarGraphColors);
+			box.scale = [1, 0.1, 1];
+			box.scaleTo({
+				scale: [1, Math.randomFloat(0.2, 1.0), 1],
+				time: 400,
+				lerpType: THING.LerpType.Linear.Quadratic
+			});
+		} else {
+			app.query('.Box').destroyAll();
+			obj.visible = true;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------
+	//加载机柜标签
+	function create_UI(obj) {
+		var panel = new THING.widget.Panel({
+			width: "110px",
+			closeIcon: false,
+			opacity: 0.7,
+		});
+
+		panel.add(obj, 'id').caption('机柜');
+		// 创建obj ui (跟随物体用)
+		var ui = app.create({
+			type: 'UI',
+			parent: obj,
+			el: panel.domElement,
+			offset: [0, obj.boundingBox.size[1], 0]
+		});
+		return panel;
+	}
+	//显示机柜标签
+	function show_UI() {
+		var thing = app.query('.Thing');
+		thing.on(THING.EventType.MouseEnter, function () {
+
+			if (_thingUI[this.id] === undefined || _thingUI[this.id] == null) {
+				var m = create_UI(this);
+				_thingUI[this.id] = m;
+			} else {
+				_thingUI[this.id].visible = true;
+			}
+		});
+		thing.on(THING.EventType.MouseLeave, function () {
+			_thingUI[this.id].visible = false;
+		});
+	};
+	//-----------------------------------------------------------------------------------------
+	//创建Racks
+	function createRack(obj, url, curUPos) {
+		var y = curUPos * RACK_UNIT_HEIGHT;
+		var rack = app.create({
+			type: 'Rack',
+			name: 'rack',
+			url: url,
+			complete: function () {
+				obj.add({
+					object: this,
+					basePoint: 'BasePoint',
+					localPosition: [0, y, 0],
+					localAngles: [0, 0, 0]
+				});
+
+			}
+		});
+	}
+	//创建Rack
+	function createRacks(obj) {
+		var curUPos = 0;
+		while (true) {
+			var pair = RackModels[Math.randomInt(0, RackModels.length - 1)];
+			var url = pair[0];
+			var uHeight = pair[1];
+
+			var rack = createRack(obj, url, curUPos);
+
+			if (curUPos >= CABINET_DEFAULT_UNITCOUNT - 4)
+				break;
+			curUPos += uHeight;
+		}
+		return rack;
+	}
+
+	function destroyRacks() {
+		app.query('rack').destroyAll();
+	}
+	
+	//创建Rack标签
+	var rankUIclear = null;
+	function createRacksUI(rack){
+		if(rankUIclear == null)
+		{
+			var ui = new THING.widget.Panel({
+				type:"RackUI",
+				name:"rackUI",
+				titleText: rack.name,
+				closeIcon: true,
+				dragable: true,
+				retractable: true,
+				hasTitle: true,
+				width: "300px",
+			});
+			ui.zIndex = 999999;//设置ui排序
+			ui.addTab(gen_rack_info());
+			ui.position = [390, 350];
+			rankUIclear = ui;
+			return ui;
+		}else{
+			rankUIclear.destroy();
+			var ui = new THING.widget.Panel({
+				type:"RackUI",
+				name:"rackUI",
+				titleText: rack.name,
+				closeIcon: true,
+				dragable: true,
+				retractable: true,
+				hasTitle: true,
+				width: "300px",
+			});
+			ui.zIndex = 999999;//设置ui排序
+			ui.addTab(gen_rack_info());
+			ui.position = [390, 350];
+			rankUIclear = ui;
+			return ui;
+		}
+	}
+	//Rank标签信息
+	function gen_rack_info() {
+		var type2 = ["PC服务器", "路由器"];
+		var type3 = ["IBM", "HP", "DELL"];
+		var people = ["王WW", "李LL", "张ZZ"];
+		var info = {
+			"基本信息": {
+				"一级分类": "微机",
+				"二级分类": type2[Math.randomInt(0, 1)],
+				"设备类型": type3[Math.randomInt(0, 2)],
+				"编号": "00" + Math.randomInt(0, 9),
+				"使用人": people[Math.randomInt(0, 2)],
+				"管理员": people[Math.randomInt(0, 2)],
+				"上架时间": "" + Math.randomInt(10, 23) + ":" + Math.randomInt(10, 23),
+			},
+			"扩展信息": {
+				"信息XX": Math.ceil(Math.random() * 27 + 25) + "",
+				"信息YY": Math.ceil(Math.random() * 25 + 20) + "",
+				"信息ZZ": Math.ceil(Math.random() * 27 + 25) + "",
+				"信息AA": Math.ceil(Math.random() * 25 + 20) + "",
+				"信息BB": Math.ceil(Math.random() * 27 + 25) + "",
+				"信息CC": Math.ceil(Math.random() * 25 + 20) + "",
+				"信息DD": Math.ceil(Math.random() * 25 + 20) + "",
+			}
+		};
+		return info;
+	}
+	//-----------------------------------------------------------------------------------------
+	//初始化机柜
+	function init_cabinets() {
+		var d = null;
+		var thing = app.query('.Thing');
+		var part = {};
+		//双击左键关门
+		thing.on('dblclick', function () {
+			// 摄影机飞行
+			var pos = this.selfToWorld([0, 2.0, -2.1]);
+			var targ = this.position;
+			targ[1] += 0.95;
+			app.camera.flyTo({
+				time: 1000,
+				position: pos,
+				target: targ,
+			});
+			//机柜开门动画
+			if (_thingStation[this.id] === undefined || _thingStation[this.id] == null || d == null) {
+				d = openDoor(this);
+				_thingStation[this.id] = d;
+			} else {
+				d = closeDoor(this);
+				_thingStation[this.id] = d;
+			}
+		});
+
+		//右键单击关门或者退至上一层级
+		app.on('click', function (e) {
+			if (event.button == 2) {
+				if (d != undefined && d != null) {
+
+					d = closeDoor(d);
+					_thingStation[this.id] = d;
+
+				} else {
+					var floor = app.query('新楼层')[0];
+					app.level.change(floor);
+					
+
+				}
+			}
+		});
+		// 架式服务器事件（尚未创建，预先注册）
+		app.on('mouseon', '.Rack', null, function (ev) {
+			this.style.outlineColor = '#ff0000';
+		});
+		app.on('mouseoff', '.Rack', null, function (ev) {
+			this.style.outlineColor = null;
+		});
+		app.on('click', '.Rack', null, function (ev) {
+			
+			if(_rackUI[this.id] === undefined || _rackUI[this.id] == null){
+				var m =createRacksUI(this);
+				rackUIclear = createRacksUI(this);
+				_rackUI[this.id] = m;
+			}
+			
+		});
+	}
+	//开门方法
+	function openDoor(obj) {
+		obj.playAnimation('open2');
+		createRacks(obj);
+		return obj;
+	}
+	//关门方法
+	function closeDoor(obj) {
+		obj.playAnimation({
+			name: 'close2',
+			complete: function () {
+				destroyRacks(obj);
+			}
+		});
+		return null;
+	}
+</script>
+
+
+</html>
