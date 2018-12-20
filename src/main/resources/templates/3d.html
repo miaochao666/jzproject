@@ -7,14 +7,11 @@
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
-    <style type="text/css">
-        ul li img{
-            width: 150px;
-        }
-    </style>
+
 </head>
 <body>
 <div id="3dEdit">
+    <button class="btn btn-default">保存</button>
 
     <div name="models" style="position:absolute;z-index: 3;width: 100%">
         <ul class="list-unstyled" style="float: right;">
@@ -39,22 +36,29 @@
     </div>
 
 </div>
-<script>
+<style th:inline="css">
+    ul li img{
+        width: 150px;
+    }
+</style>
+<script th:inline="javascript">
 
 
     app=new THING.App({
         container: '3dEdit',
-        url:'./scene',
+        url:'./scene/'+[[${sceneSource}]],
     })
     app.on('load', function (ev) {
         app.level.change(ev.campus);
-
+        createModel();
         dragIcon('model1',dragStart);
         dragIcon('model2',dragStart);
         dragIcon('model3',dragStart);
         dragIcon('model4',dragStart);
 
     });
+
+
 
     app.pauseEvent(THING.EventType.Click,'*',THING.EventTag.LevelBackMethod);
     app.on(THING.EventType.DBLClick,function(ev){
@@ -78,8 +82,31 @@
 
         //关闭摄像机转动
         app.camera.enableRotate=false;
-
     }
+
+    function createModel(){
+        var list=[[${list}]];
+        for(var model in list){
+            app.create({
+                type:'Thing',
+                name:'',
+                url:model.attr_url,
+                position:[model.positionx,model.positiony,model.positionz]
+            })
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     //关联拖动图标
     function dragIcon(id,callback1) {
@@ -91,7 +118,6 @@
     }
 
     var newModel=null;
-
     //物体跟随鼠标移动
     app.on('mousemove',function (ev) {
         if(newModel){

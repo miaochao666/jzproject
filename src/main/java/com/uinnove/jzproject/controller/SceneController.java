@@ -58,7 +58,14 @@ public class SceneController {
     @RequestMapping("/savePoint")
     @ResponseBody
     public Integer savePoint(Integer sceneId,String longitude,String latitude){
-
         return sceneService.setPoint(sceneId,longitude,latitude);
     }
+
+    @RequestMapping("/cancelScene")
+    @ResponseBody
+    public Integer cancelScene(Integer sceneId){
+         sceneService.delScene(sceneId);
+        return 1;
+    }
+
 }

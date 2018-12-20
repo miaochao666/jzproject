@@ -35,4 +35,14 @@ public class SceneServiceImpl implements SceneService {
     public int setPoint(Integer sceneId, String longitude, String latitude) {
         return sceneMapper.updateScene(sceneId,longitude,latitude);
     }
+
+    @Override
+    public void delScene(Integer sceneId) {
+         sceneMapper.deleteById(sceneId);
+    }
+
+    @Override
+    public Scene selectIdAndSource(Integer sceneId) {
+        return sceneMapper.findBySceneId(sceneId);
+    }
 }

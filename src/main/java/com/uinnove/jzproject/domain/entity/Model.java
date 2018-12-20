@@ -41,23 +41,6 @@ public class Model {
     @Column
     private Double positionZ;
 
-    /**
-     * 模型宽度
-     */
-    @Column
-    private Double modelWidth;
-
-    /**
-     * 模型长度
-     */
-    @Column
-    private Double modelLength;
-
-    /**
-     * 模型高度
-     */
-    @Column
-    private Double modelHeight;
 
     /**
      * 模型路径
@@ -65,14 +48,11 @@ public class Model {
     @Column
     private String modelAttrUrl;
 
-    /**
-     * 模型图片
-     */
-    private String modelImg;
 
     /**
      * 场景id
      */
     @Column
-    private String sceneId;
+    private Integer sceneId;
+
 }

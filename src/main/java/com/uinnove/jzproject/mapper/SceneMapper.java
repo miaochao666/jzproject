@@ -34,8 +34,19 @@ public interface SceneMapper extends JpaRepository<Scene,Integer> {
     int copyScene(String scene_describe,String scene_img,String scene_name,String scene_source);
 
 
+    /**
+     * 更新坐标
+     * @param sceneId
+     * @param longitude
+     * @param latitude
+     * @return
+     */
     @Modifying
     @Transactional
     @Query(value="update scene set longitude=?2,latitude=?3 where scene_id=?1",nativeQuery = true)
     int updateScene(Integer sceneId,String longitude,String latitude);
+
+
+    Scene findBySceneId(Integer sceneId);
+
 }

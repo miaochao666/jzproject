@@ -15,4 +15,9 @@ public interface SceneService {
      List<Scene> selectList();
 
      int setPoint(Integer sceneId,String longitude,String latitude);
+
+     void delScene(Integer sceneId);
+
+     Scene selectIdAndSource(Integer sceneId);
+
 }
