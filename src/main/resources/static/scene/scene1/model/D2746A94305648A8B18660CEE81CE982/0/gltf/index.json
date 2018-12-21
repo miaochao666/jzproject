@@ -1,0 +1,24 @@
+{
+  "sourceFile": "D:\\work\\D2746A94305648A8B18660CEE81CE982_6_转换中\\max\\18000D2746A94305648A8B18660CEE81CE982.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "0A5B410EBABB3793372544493842EB4B": "0A5B410EBABB3793372544493842EB4B.bin",
+    "2EE94912A7EB94DBB2A80DA1CCBBE04D": "Textures_LM.jpg",
+    "AB118EF4031B331014C66C6335850D51": "H3C_N68机柜_hcj01.jpg"
+  },
+  "size": [
+    0.600001454,
+    0.855799556,
+    2.2
+  ],
+  "faces": 432,
+  "verts": 748,
+  "nodes": 13,
+  "createTime": "2018-08-14 17:09:41",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

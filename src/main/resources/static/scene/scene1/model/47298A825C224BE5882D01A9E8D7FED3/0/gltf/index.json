@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\47298A825C224BE5882D01A9E8D7FED3_6_转换中\\max\\1800018000门_CCB_Door15x24_01.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "36D0212B822B7F73911FA235A350F904": "36D0212B822B7F73911FA235A350F904.bin",
+    "4CD69233AE8749DD98862D2D31D1714D": "Textures_0151.jpg"
+  },
+  "size": [
+    1.5,
+    0.100000158,
+    2.39999986
+  ],
+  "faces": 44,
+  "verts": 76,
+  "nodes": 8,
+  "createTime": "2018-08-14 9:59:13",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

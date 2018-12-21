@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\E99150EF0AC24D4F92C17ED572CACC45_6_转换中\\max\\1800018000门_shdz门10x23_01.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "63C0745B6F8342637FB172112217D48E": "63C0745B6F8342637FB172112217D48E.bin",
+    "DFE6452C9D77859CC87A42574522F18B": "Textures_01.jpg"
+  },
+  "size": [
+    1.0,
+    0.100000262,
+    2.29999971
+  ],
+  "faces": 36,
+  "verts": 48,
+  "nodes": 6,
+  "createTime": "2018-08-14 17:17:29",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

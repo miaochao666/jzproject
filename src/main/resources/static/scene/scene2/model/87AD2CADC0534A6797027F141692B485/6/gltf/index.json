@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\87AD2CADC0534A6797027F141692B485_6_转换中\\max\\18000门禁02.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "F37AD5D2B8EFA280B70D9CE654CF782B": "F37AD5D2B8EFA280B70D9CE654CF782B.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "ntexture_01.jpg"
+  },
+  "size": [
+    0.0661164,
+    0.03153358,
+    0.107369147
+  ],
+  "faces": 44,
+  "verts": 84,
+  "nodes": 2,
+  "createTime": "2018-08-14 14:43:50",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\A9B2E15D940045119D68052BB4900E8A_6_转换中\\max\\18000球式摄像机.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "F23BDF9D147948B1B1EC45AC76147572": "F23BDF9D147948B1B1EC45AC76147572.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "NTexture_01.jpg"
+  },
+  "size": [
+    0.160589755,
+    0.160589755,
+    0.109587058
+  ],
+  "faces": 97,
+  "verts": 190,
+  "nodes": 2,
+  "createTime": "2018-08-14 16:51:19",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

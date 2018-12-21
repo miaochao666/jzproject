@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\D378A2ECBB844AD990DC4C8C106D6D28_5_转换中\\max\\18000安防_网络监控摄像头_01.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "52AE7B8E9D23182956BC182106E7D64A": "52AE7B8E9D23182956BC182106E7D64A.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "NTexture_01.jpg"
+  },
+  "size": [
+    0.154671535,
+    0.167917892,
+    0.200797856
+  ],
+  "faces": 371,
+  "verts": 690,
+  "nodes": 2,
+  "createTime": "2018-08-14 17:10:01",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

@@ -1,0 +1,24 @@
+{
+  "sourceFile": "D:\\work\\a63fbde906244f15a345954a10fa9adc_6_转换中\\max\\18000定制1200深800宽机柜_2.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "52944E1CE4CE09BB9ADFAB99B1DFE92C": "52944E1CE4CE09BB9ADFAB99B1DFE92C.bin",
+    "B6A465C667A4E3C92C84D40728D04F73": "图腾600机柜42U.jpg",
+    "5EDB1B5608A4A1A95FB81C93F960CDA3": "机柜U高.jpg"
+  },
+  "size": [
+    0.8009863,
+    1.22200036,
+    2.0
+  ],
+  "faces": 1362,
+  "verts": 1912,
+  "nodes": 6,
+  "createTime": "2018-08-14 18:25:48",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\040F25C0E49D4A5C93B861EA45BDB3FB_6_转换中\\max\\18000温湿度感应器B.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "2B1EC8BE7FD410A43FBB87306ED5F8DE": "2B1EC8BE7FD410A43FBB87306ED5F8DE.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "ntexture_01.jpg"
+  },
+  "size": [
+    0.07332419,
+    0.136668339,
+    0.1338553
+  ],
+  "faces": 35,
+  "verts": 59,
+  "nodes": 2,
+  "createTime": "2018-08-13 11:14:35",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(21000, 52, 0)",
+  "version": "2.0"
+}

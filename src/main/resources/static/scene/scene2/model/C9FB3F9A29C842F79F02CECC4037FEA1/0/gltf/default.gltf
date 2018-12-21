@@ -1,0 +1,327 @@
+{
+  "materials": [
+    {
+      "name": "Material_#31",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0,
+          "texCoord": 0
+        },
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "metallicFactor": 0.099999994,
+        "roughnessFactor": 1
+      },
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Material_#31boli",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0,
+          "texCoord": 0
+        },
+        "baseColorFactor": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.0
+      },
+      "alphaMode": "BLEND"
+    }
+  ],
+  "images": [
+    {
+      "uri": "B13F60F36A0A14C2937B265C1FF60DD5.png"
+    }
+  ],
+  "textures": [
+    {
+      "name": "Textures_01.png",
+      "sampler": 0,
+      "source": 0
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Lo-3米玻璃墙_01",
+      "primitives": [
+        {
+          "material": 0,
+          "mode": 4,
+          "indices": 0,
+          "attributes": {
+            "NORMAL": 2,
+            "POSITION": 1,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lo-Body玻璃_01",
+      "primitives": [
+        {
+          "material": 1,
+          "mode": 4,
+          "indices": 5,
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6,
+            "TEXCOORD_0": 8,
+            "TEXCOORD_1": 9
+          }
+        }
+      ]
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 3784,
+      "uri": "7254210B3EA18669EEFC476FF8BCA823.bin"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "RootNode",
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "children": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "Lo-3米玻璃墙_01",
+      "translation": [
+        0.0,
+        0.0,
+        -2.76958178613285E-10
+      ],
+      "rotation": [
+        -0.70710676908493,
+        0.0,
+        0.0,
+        0.70710676908493
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "mesh": 0
+    },
+    {
+      "name": "Lo-Body玻璃_01",
+      "translation": [
+        0.0,
+        0.0,
+        -2.76958178613285E-10
+      ],
+      "rotation": [
+        -0.70710676908493,
+        0.0,
+        0.0,
+        0.70710676908493
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "mesh": 1
+    }
+  ],
+  "asset": {
+    "generator": "FBX2glTF",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 216,
+      "byteOffset": 0,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 864,
+      "byteOffset": 216,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 864,
+      "byteOffset": 1080,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 576,
+      "byteOffset": 1944,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 576,
+      "byteOffset": 2520,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 48,
+      "byteOffset": 3096,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 192,
+      "byteOffset": 3144,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 192,
+      "byteOffset": 3336,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 128,
+      "byteOffset": 3528,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 128,
+      "byteOffset": 3656,
+      "target": 34962
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Root Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "componentType": 5123,
+      "type": "SCALAR",
+      "count": 108,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC3",
+      "count": 72,
+      "bufferView": 1,
+      "byteOffset": 0,
+      "min": [
+        -0.75,
+        -0.0394741706550121,
+        0.0
+      ],
+      "max": [
+        0.75,
+        0.0394741706550121,
+        3.15392303466797
+      ]
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC3",
+      "count": 72,
+      "bufferView": 2,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC2",
+      "count": 72,
+      "bufferView": 3,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC2",
+      "count": 72,
+      "bufferView": 4,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5123,
+      "type": "SCALAR",
+      "count": 24,
+      "bufferView": 5,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC3",
+      "count": 16,
+      "bufferView": 6,
+      "byteOffset": 0,
+      "min": [
+        -0.75,
+        -0.0100000333040953,
+        0.124309077858925
+      ],
+      "max": [
+        0.75,
+        0.0100000333040953,
+        3.02985310554504
+      ]
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC3",
+      "count": 16,
+      "bufferView": 7,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC2",
+      "count": 16,
+      "bufferView": 8,
+      "byteOffset": 0
+    },
+    {
+      "componentType": 5126,
+      "type": "VEC2",
+      "count": 16,
+      "bufferView": 9,
+      "byteOffset": 0
+    }
+  ],
+  "samplers": [
+    {}
+  ]
+}

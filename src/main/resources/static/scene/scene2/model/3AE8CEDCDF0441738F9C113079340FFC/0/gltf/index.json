@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\3AE8CEDCDF0441738F9C113079340FFC_6_转换中\\max\\18000摄像头.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "AB9C71C5215C5B8CAA7D0430AE1E0A79": "AB9C71C5215C5B8CAA7D0430AE1E0A79.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "ntexture_01.jpg"
+  },
+  "size": [
+    0.123058625,
+    0.15414989,
+    0.193687245
+  ],
+  "faces": 218,
+  "verts": 412,
+  "nodes": 2,
+  "createTime": "2018-08-13 23:28:26",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}
