@@ -7,11 +7,11 @@
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+    <script th:src="@{/js/thing.widget.min.js}"></script>
 
 </head>
 <body>
 <div id="3dEdit">
-    <button class="btn btn-default">保存</button>
 
     <div name="models" style="position:absolute;z-index: 3;width: 100%">
         <ul class="list-unstyled" style="float: right;">
@@ -42,15 +42,17 @@
     }
 </style>
 <script th:inline="javascript">
-
+    var sceneId=[[${sceneId}]];
 
     app=new THING.App({
         container: '3dEdit',
         url:'./scene/'+[[${sceneSource}]],
     })
     app.on('load', function (ev) {
-        app.level.change(ev.campus);
         createModel();
+        app.level.change(ev.campus);
+        new THING.widget.Button("保存",save);
+
         dragIcon('model1',dragStart);
         dragIcon('model2',dragStart);
         dragIcon('model3',dragStart);
@@ -74,7 +76,8 @@
         //创建物体
         newModel=app.create({
             type:'Thing',
-            url,
+            name:'createModel',
+            url:url,
             position:app.camera.screenToWorld(x,y)
         });
         //防止拖动过程中获取时间坐标的时候，对位置进行重复拾取
@@ -83,17 +86,24 @@
         //关闭摄像机转动
         app.camera.enableRotate=false;
     }
-
+    var oldModel=null;
     function createModel(){
         var list=[[${list}]];
-        for(var model in list){
-            app.create({
-                type:'Thing',
-                name:'',
-                url:model.attr_url,
-                position:[model.positionx,model.positiony,model.positionz]
-            })
+        if(list.length>0){
+            for(var i=0;i<list.length;i++){
+                console.log(list[i].modelAttrUrl);
+                console.log(list[i].positionX);
+                console.log(list[i].positionY);
+                console.log(list[i].positionZ);
+                oldModel=app.create({
+                    type:'Thing',
+                    name:'createModel',
+                    url:list[i].modelAttrUrl,
+                    position:[list[i].positionX,list[i].positionY,list[i].positionZ]
+                })
+            }
         }
+
     }
 
 
@@ -170,6 +180,34 @@
             });
         }
     });
+
+
+    function save(){
+        var models=app.query("createModel");
+        var modelArray=new Array();
+
+        for(var i=0;i<models.length;i++){
+            var data={
+                "modelAttrUrl":models[i].url,
+                "modelName":models[i].name,
+                "positionX":models[i].position[0],
+                "positionY":models[i].position[1],
+                "positionZ":models[i].position[2]
+            }
+            modelArray.push(data);
+        }
+
+        $.ajax({
+            url:'/updateModels',
+            data:{"params":JSON.stringify(modelArray),"sceneId":sceneId},
+            dataType:'json',
+            type:'post',
+            traditional:true,
+            success:function (result) {
+                alert(result);
+            }
+        })
+    }
 
 </script>
 </body>
