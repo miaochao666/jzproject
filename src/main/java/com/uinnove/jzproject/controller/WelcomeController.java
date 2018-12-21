@@ -9,7 +9,7 @@ public class WelcomeController {
 
     @RequestMapping("/")
     public ModelAndView mian(ModelAndView modelAndView){
-        modelAndView.setViewName("scene.html");
+        modelAndView.setViewName("map.html");
         return modelAndView;
     }
 

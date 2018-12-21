@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html>
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8" />
-	<title></title>
-
-	<script src="/static/js/thingjs.min-v1.2.2.4.js"></script>
-	<script src="/static/js/thing.widget.min.js"></script>
-	<script src="/static/js/jquery.min.js"></script>
-
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css}" />
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+	<script th:src="@{/js/thing.widget.min.js}"></script>
 	<style>
 		html,
 		body {
@@ -34,16 +33,16 @@
 	</div>
 </body>
 <script>
-	const CABINET_DEFAULT_UNITCOUNT = 42; // 默认机柜u数
-	const RACK_UNIT_HEIGHT = 0.0445; // 1u为4.3厘米
-	const BarGraphColors = ['#0000ff', '#00ffff', '#00ff00', '#ff0000', '#ff00ff', '#ffff00'];
-	const RackModels = [
+	var CABINET_DEFAULT_UNITCOUNT = 42; // 默认机柜u数
+	var RACK_UNIT_HEIGHT = 0.0445; // 1u为4.3厘米
+	var BarGraphColors = ['#0000ff', '#00ffff', '#00ff00', '#ff0000', '#ff00ff', '#ffff00'];
+	var RackModels = [
 		['http://model.3dmomoda.cn/models/3817338017ff4776a5dd05f03a3e2fd4/0/gltf', 1],
 		['http://model.3dmomoda.cn/models/37972dd2c96c4a37a3245a00bee3628b/0/gltf', 2]
 	];
 	var app = new THING.App({
 		container: '3d',
-		url: '/static/scene',
+		url: '/scene/scene3',
 
 	});
 

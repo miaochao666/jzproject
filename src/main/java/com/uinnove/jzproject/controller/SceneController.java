@@ -68,4 +68,13 @@ public class SceneController {
         return 1;
     }
 
+    @RequestMapping("/sceneMap")
+    @ResponseBody
+    public List<Scene> sceneMap(){
+        List<Scene> list=sceneService.selectList();
+        /*modelAndView.addObject("list",list);
+        modelAndView.setViewName("map.html");*/
+        return list;
+    }
+
 }

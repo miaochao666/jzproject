@@ -84,12 +84,10 @@
             var map = new BMap.Map("allmap",{enableMapClick: false});    // 创建Map实例
 
             if(a!=null && b!=null){
-                debugger
                 map.centerAndZoom(new BMap.Point(parseFloat(a), parseFloat(b)), 15);
                 marker = new BMap.Marker(new BMap.Point(parseFloat(a), parseFloat(b))); // 创建点
                 map.addOverlay(marker);
             }else{
-                debugger
                 map.centerAndZoom(new BMap.Point(116.404, 39.915), 15);  // 初始化地图,设置中心点坐标和地图级别
             }
 

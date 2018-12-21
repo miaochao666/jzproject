@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-	<style type="text/css">
-		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
-		#allmap{height:100%;width:100%;}
-		/* #r-result{width:100%;} */
-	</style>
-	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sLx7Au9WCynE571eYjTQv4S94QPxT7L6"></script>
+	<meta charset="UTF-8">
 	<title>基础可视化</title>
+	<link rel="stylesheet" th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css}" />
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/thingjs.min-v1.2.2.4.js}"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6p6A02RW5Z9hSH4lZp5QGkXrYrns19H5"></script>
+	<style type="text/css">
+	body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+	#allmap{height:100%;width:100%;}
+	/* #r-result{width:100%;} */
+	</style>
+
 </head>
-<body  style="overflow:hidden">
+<body  style="overflow:hidden" th:fragment="sceneIncludeModel">
 	<header style=
 		"width: 100%;
 		height: 50px;
 		background: url(../static/img/logo2x.png) no-repeat;
 		background-size: contain; ">
-		
+
 		<div style="float:right;text-align:center;height: 100%;">
-				<a style="color: #0066CC; float: right;" href="main.html">
+				<a style="color: #0066CC; float: right;" href="sceneIncludeModel.html">
 				后台管理</a></div>
 	</header>
 	<div id="allmap"></div>
 	
 </body>
-</html>
-<script type="text/javascript">
-	// 百度地图API功能
-	var map = new BMap.Map("allmap");
-	var centerPoint;
-	var maker;
-	
-	centerPoint = new BMap.Point(116.404, 39.915);
-	map.centerAndZoom(centerPoint, 12);
-	// map.addEventListener("click", setPoint);
-	
-	function setPoint(e){
-		marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
-		map.addOverlay(marker);            //增加点
-	}
-	
+<script th:inline="javascript">
+    // 百度地图API功能
+    var centerPoint;
+    var marker;
+    var markerArray=new Array();
+    var map = new BMap.Map("allmap",{enableMapClick: false});
+    centerPoint = new BMap.Point(116.404, 39.915);
+    map.centerAndZoom(centerPoint, 12);
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+    $(document).ready(function () {
+		$.ajax({
+			url:'/sceneMap',
+			dataType:'json',
+			success:function(result){
+				for(var i=0;i<result.length;i++){
+				    var scene=result[i];
+                    marker = new BMap.Marker(new BMap.Point(scene.longitude,scene.latitude )); // 创建点
+                    map.addOverlay(marker);
+					markerArray.push(marker);
+                    markerArray[i].addEventListener("click",function () {
+						alert(scene.sceneId);
+
+                    })
+				}
+			}
+		})
+    });
+
+
+
+
 </script>
+</html>
