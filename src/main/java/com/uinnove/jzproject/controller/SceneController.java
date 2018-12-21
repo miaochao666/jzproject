@@ -72,8 +72,6 @@ public class SceneController {
     @ResponseBody
     public List<Scene> sceneMap(){
         List<Scene> list=sceneService.selectList();
-        /*modelAndView.addObject("list",list);
-        modelAndView.setViewName("map.html");*/
         return list;
     }
 

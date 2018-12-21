@@ -18,6 +18,7 @@
             <li role="presentation"><a href="/scene">基站模板</a></li>
             <li role="presentation" class="active"><a href="/sceneIncludeModel">基站场景</a></li>
             <li role="presentation"><a href="#">进入3D</a></li>
+            <li role="presentation"><a href="/map">返回首页</a></li>
         </ul>
     </div>
 </header>
@@ -48,7 +49,7 @@
 
                 <h3 th:text="${scene.sceneName}"></h3>
                 <h4 th:text="${scene.sceneDescribe}"></h4>
-                <button type="button" class="btn btn-primary" th:onclick="preview([[${scene.sceneSource}]])" style="font-size: 12px">预览</button>
+                <button type="button" class="btn btn-primary" th:onclick="preview([[${scene.sceneSource}]],[[${scene.sceneId}]])" style="font-size: 12px">预览</button>
                 <button type="button" class="btn btn-success" th:onclick="setpoints([[${scene.longitude}]],[[${scene.latitude}]],[[${scene.sceneId}]])" style="font-size: 12px">设置位置</button>
                 <button type="button" class="btn btn-default" th:onclick="javascrtpt:window.location.href='/allModels?sceneId='+[[${scene.sceneId}]]" style="font-size: 12px">编辑</button>
                 <button type="button" class="btn btn-danger" th:onclick="del([[${scene.sceneId}]])" style="font-size: 12px">删除</button>
@@ -60,21 +61,56 @@
     <script th:inline="javascript">
 
 
-        function preview(source) {
+        function preview(source,id) {
 
-
+            $("#3d").html("");
             app=new THING.App({
                 container: '3d',
                 url:'./scene/'+source,
+                loaderResourceUrl: '/scene/'+source
             })
             $("#preview").modal("show");
+
+
             app.on('load', function (ev) {
-                app.level.change(ev.campus);
+                var floor = app.query('新楼层')[0];
+                app.level.change(floor);
+                createModel(id);
+                app.pauseEvent(THING.EventType.Click, '*', THING.EventTag.LevelBackMethod);
+                app.on(THING.EventType.DBLClick, function (ev) {
+                    if (ev.button != 2) {
+                        return;
+                    }
+                    app.level.back();
+                }, 'customLevelBackMethod');
             });
+
+        }
+        var oldModel=null;
+        function createModel(id) {
+            $.ajax({
+                url:'/previewScene',
+                data:'sceneId='+id,
+                dataType:'json',
+                type:'post',
+                success:function(result){
+                    console.log(result);
+                    // alert(result);
+                    if(result.length>0){
+                        for(var i=0;i<result.length;i++){
+                            oldModel=app.create({
+                                type:'Thing',
+                                name:'createModel',
+                                url:result[i].modelAttrUrl,
+                                position:[result[i].positionX,result[i].positionY,result[i].positionZ],
+                            });
+                        }
+                    }
+                }
+            })
         }
 
 
-        
         function setpoints(a,b,id) {
 
 
@@ -134,7 +170,6 @@
                 div.appendChild(document.createTextNode("保存当前位置"));
 
                 div.onclick=function(){
-                    //alert(ing+','+lat+','+id);
                     $.ajax({
                         url:'/savePoint',
                         data:'sceneId='+id+'&longitude='+ing+'&latitude='+lat,

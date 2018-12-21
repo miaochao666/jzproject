@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -47,16 +47,20 @@
     app=new THING.App({
         container: '3dEdit',
         url:'./scene/'+[[${sceneSource}]],
+        loaderResourceUrl: './scene/'+[[${sceneSource}]]
     })
     app.on('load', function (ev) {
-        createModel();
-        app.level.change(ev.campus);
-        new THING.widget.Button("保存",save);
 
+        app.level.change(ev.campus);
+        var floor=app.query('新楼层')[0];
+        app.level.change(floor);
+        new THING.widget.Button("保存",save);
+        createModel();
         dragIcon('model1',dragStart);
         dragIcon('model2',dragStart);
         dragIcon('model3',dragStart);
         dragIcon('model4',dragStart);
+        // console.log(app.query("createModel"));
 
     });
 
@@ -65,10 +69,27 @@
     app.pauseEvent(THING.EventType.Click,'*',THING.EventTag.LevelBackMethod);
     app.on(THING.EventType.DBLClick,function(ev){
         if(ev.button!=2){
+
             return;
         }
+
         app.level.back();
     });
+
+    var newModel=null;
+    var _preSelThing = false,
+        curObj;
+    function addControl(obj){
+        curObj = obj;
+        if (!obj.hasControl('axisControl')) {
+            obj.addControl(new THING.AxisTransformControl(obj), 'axisControl');
+        }
+        if(_preSelThing && _preSelThing.id != obj.id){
+            _preSelThing.removeControl('axisControl');
+        }
+        _preSelThing = obj;
+    }
+
 
     //创建物体并开始拖动
     function dragStart(url,x,y) {
@@ -80,40 +101,76 @@
             url:url,
             position:app.camera.screenToWorld(x,y)
         });
-        //防止拖动过程中获取时间坐标的时候，对位置进行重复拾取
+        // console.log(newModel);
+        // //防止拖动过程中获取时间坐标的时候，对位置进行重复拾取
         newModel.pickable=false;
-
-        //关闭摄像机转动
+        // //给对象绑定上选择事件
+        // newModel.on('singleclick',function (ev) {
+        //     addControl(ev.object);
+        // });
+        // //关闭摄像机转动
         app.camera.enableRotate=false;
     }
+
+    //物体跟随鼠标移动
+    app.on('mousemove',function (ev) {
+        if(newModel){
+            var worldPosition = app.picker.pickWorldPosition(ev.clientX,ev.clientY);
+            if(!worldPosition){
+                worldPosition=app.camera.screenToWorld(ev.clientX,ev.clientY);
+            }
+            newModel.position=worldPosition;
+        }
+    });
+
+
+    // 鼠标右键点击取消所有控制轴
+    app.on('mousedown', function (ev) {
+        if (ev.button == 2) {
+            // app.query('.Thing').forEach(function (object) {
+            //     object.removeControl('axisControl');
+            // });
+            if(_preSelThing){
+                _preSelThing.removeControl('axisControl');
+                curObj = false;
+                _preSelThing = false;
+            }
+        }
+    });
+
+
+    //鼠标抬起时取消物体移动
+    app.on('mouseup',function (ev) {
+        if(newModel){
+            //重新让物体开启拾取
+            newModel.pickable=true;
+            //点击物体可以开启/关闭控制轴
+
+            addControl(newModel);
+            newModel = false;
+        }
+        app.camera.enableRotate=true;
+
+
+    });
+    app.on('singleclick','[type=Thing]',function (ev) {
+        addControl(ev.object);
+    });
+
     var oldModel=null;
     function createModel(){
         var list=[[${list}]];
         if(list.length>0){
             for(var i=0;i<list.length;i++){
-                console.log(list[i].modelAttrUrl);
-                console.log(list[i].positionX);
-                console.log(list[i].positionY);
-                console.log(list[i].positionZ);
                 oldModel=app.create({
                     type:'Thing',
                     name:'createModel',
                     url:list[i].modelAttrUrl,
-                    position:[list[i].positionX,list[i].positionY,list[i].positionZ]
-                })
+                    position:[list[i].positionX,list[i].positionY,list[i].positionZ],
+                });
             }
         }
-
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -126,61 +183,6 @@
             callback1(url,e.pageX,e.pageY);
         }
     }
-
-    var newModel=null;
-    //物体跟随鼠标移动
-    app.on('mousemove',function (ev) {
-        if(newModel){
-            var worldPosition = app.picker.pickWorldPosition(ev.clientX,ev.clientY);
-            if(!worldPosition){
-                worldPosition=app.camera.screenToWorld(ev.clientX,ev.clientY);
-            }
-
-            newModel.position=worldPosition;
-        }
-    })
-
-    //鼠标抬起时取消物体移动
-    app.on('mouseup',function (ev) {
-        if(newModel){
-
-            //重新让物体开启拾取
-            newModel.pickable=true;
-
-            //点击物体可以开启/关闭控制轴
-            newModel.on('singleclick',function (ev) {
-                var object=ev.object;
-                if(object.hasControl('axisControl')){
-                    object.removeControl('axisControl');
-                }else{
-                    object.addControl(new THING.AxisTransformControl(object),'axisControl')
-                }
-
-                app.query('.Thing').not(object).forEach(function (object) {
-                    object.removeControl('axisControl');
-                })
-            })
-
-            //触发点击事件来给物体添加控制轴
-            newModel.trigger('singleclick');
-
-            newModel=null;
-        }
-
-        app.camera.enableRotate=true;
-    })
-
-
-
-    // 鼠标右键点击取消所有控制轴
-    app.on('mousedown', function (ev) {
-        if (ev.button == 2) {
-            app.query('.Thing').forEach(function (object) {
-                object.removeControl('axisControl');
-            });
-        }
-    });
-
 
     function save(){
         var models=app.query("createModel");
@@ -200,11 +202,12 @@
         $.ajax({
             url:'/updateModels',
             data:{"params":JSON.stringify(modelArray),"sceneId":sceneId},
-            dataType:'json',
+            dataType:'text',
             type:'post',
             traditional:true,
             success:function (result) {
                 alert(result);
+                window.history.go(-1);
             }
         })
     }

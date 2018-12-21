@@ -16,6 +16,7 @@
             <li role="presentation" class="active"><a href="/scene">基站模板</a></li>
             <li role="presentation"><a href="/sceneIncludeModel">基站场景</a></li>
             <li role="presentation"><a href="#">进入3D</a></li>
+            <li role="presentation"><a href="/map">返回首页</a></li>
         </ul>
     </div>
 </header>
@@ -55,6 +56,7 @@
             </div>
         </div>
 
+
     </div>
 
 
@@ -66,14 +68,22 @@
             app=new THING.App({
                 container: '3d',
                 url:'/scene/'+scene,
-            })
+                loaderResourceUrl: '/scene/'+scene
+            });
             $("#preview").modal("show");
             app.on('load', function (ev) {
-                app.level.change(ev.campus);
+                var floor = app.query('新楼层')[0];
+                app.level.change(floor);
+                app.pauseEvent(THING.EventType.Click, '*', THING.EventTag.LevelBackMethod);
+                app.on(THING.EventType.DBLClick, function (ev) {
+                    if (ev.button != 2) {
+                        return;
+                    }
+                    app.level.back();
+                }, 'customLevelBackMethod');
+
             });
         }
-
-
 
         function copyScene(name,source){
 
@@ -91,8 +101,8 @@
                 dataType:'text',
                 type:'post',
                 success:function (result) {
-                    alert(result);
                     $("#copy").modal("hide");
+                    window.location.reload();
                 }
 
             })
@@ -109,9 +119,7 @@
                     type:'post',
                     dataType:'text',
                     success:function (result) {
-
                         $("#"+id).html(result);
-
                     }
                 })
             }

@@ -19,11 +19,11 @@
 	<header style=
 		"width: 100%;
 		height: 50px;
-		background: url(../static/img/logo2x.png) no-repeat;
-		background-size: contain; ">
 
+		background-size: contain; ">
+		<img th:src="@{/img/logo2x.png}" alt="" style="float: left;" height="50px">
 		<div style="float:right;text-align:center;height: 100%;">
-				<a style="color: #0066CC; float: right;" href="sceneIncludeModel.html">
+				<a style="color: #0066CC; float: right;" href="/scene">
 				后台管理</a></div>
 	</header>
 	<div id="allmap"></div>
@@ -47,16 +47,19 @@
 				for(var i=0;i<result.length;i++){
 				    var scene=result[i];
                     marker = new BMap.Marker(new BMap.Point(scene.longitude,scene.latitude )); // 创建点
+					marker.setTitle(scene.sceneId);
                     map.addOverlay(marker);
-					markerArray.push(marker);
-                    markerArray[i].addEventListener("click",function () {
-						alert(scene.sceneId);
-
+                    marker.addEventListener("click",function () {
+                        var p=this.getTitle();
+                        window.location.href="/enterScene?sceneId="+p;
                     })
 				}
 			}
 		})
+
     });
+
+
 
 
 

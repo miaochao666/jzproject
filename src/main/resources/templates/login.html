@@ -21,25 +21,17 @@
         <a style="color: white; font-size: x-large;font-style:revert; padding-left: 100px">基站可视化系统</a>
     </div>
     <div class="div-b">
-        <form>
+        <form method="post" action="/login">
             <div style="height: 250px;"></div>
             <a><img th:src="@{/img/0e93fe49da54ec4ec688e1047caf643c.png}" style="padding-left: 200px;width:200px;height:40px"></a><br>
             <p style="padding-left: 160px">用户名<br><input type="text" name="name" id="name" size="30"></p>
             <p style="padding-left: 160px">密码<br><input type="password" name="password" id="password" size="30"></p><br>
-            <div style="text-align:center"><input type="submit"  id="button" style="width: 120px" value="登陆" onclick="logIn()" /></div>
+            <div style="text-align:center"><input type="submit"  id="button" style="width: 120px" value="登录" /></div>
         </form>
     </div>
 </div>
 </body>
 <script>
-$(document).ready(function () {
-    $("#button").click(function () {
-        if($("#name").val().equals("admin") && $("#password").val().equals("123"))
-        {
-            location.href = "map.html";
-        }
-    });
-});
 </script>
 
 </html>

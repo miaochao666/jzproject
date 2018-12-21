@@ -39,9 +39,21 @@ public class ModelController {
         return modelAndView;
     }
 
+    @RequestMapping("/enterScene")
+    @ResponseBody
+    public ModelAndView enterScene(Integer sceneId,ModelAndView modelAndView){
+
+        List<Model> list= modelService.modelList(sceneId);
+        Scene scene=sceneService.selectIdAndSource(sceneId);
+        modelAndView.addObject("sceneSource",scene.getSceneSource());
+        modelAndView.addObject("list",list);
+        modelAndView.setViewName("indexScene.html");
+        return modelAndView;
+    }
+
     @RequestMapping("/updateModels")
     @ResponseBody
-    public String updateModels(ModelAndView modelAndView, HttpServletRequest request) throws Exception {
+    public String updateModels(HttpServletRequest request) throws Exception {
         String jsonStr=request.getParameter("params");
         String sceneId=request.getParameter("sceneId");
 
@@ -55,5 +67,14 @@ public class ModelController {
             modelService.addModels((String) job.get("modelAttrUrl"),(String)job.get("modelName"),(Double)job.get("positionX"),(Double)job.get("positionY"),(Double)job.get("positionZ"),Integer.parseInt(sceneId));
         }
         return "success";
+    }
+
+
+
+    @RequestMapping("/previewScene")
+    @ResponseBody
+    public List<Model> previewScene(Integer sceneId){
+        List<Model> list= modelService.modelList(sceneId);
+        return list;
     }
 }

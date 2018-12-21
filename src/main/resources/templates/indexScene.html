@@ -40,10 +40,11 @@
 		['http://model.3dmomoda.cn/models/3817338017ff4776a5dd05f03a3e2fd4/0/gltf', 1],
 		['http://model.3dmomoda.cn/models/37972dd2c96c4a37a3245a00bee3628b/0/gltf', 2]
 	];
+
 	var app = new THING.App({
 		container: '3d',
-		url: '/scene/scene3',
-
+		url: '/scene/[[${sceneSource}]]',
+        loaderResourceUrl: '/scene/[[${sceneSource}]]'
 	});
 
 
@@ -69,6 +70,8 @@
 			app.level.back();
 		}, 'customLevelBackMethod');
 
+        //createModel();
+
 		init_UI();
 
 		show_UI();
@@ -77,11 +80,28 @@
 	});
 
 	//-----------------------------------------------------------------------------------------
+	//创建model
+    /*var oldModel=null;
+    function createModel(){
+        var list=[[${list}]];
+        if(list.length>0){
+            for(var i=0;i<list.length;i++){
+                oldModel=app.create({
+                    type:'Thing',
+                    name:'createModel',
+                    url:list[i].modelAttrUrl,
+                    position:[list[i].positionX,list[i].positionY,list[i].positionZ],
+                });
+            }
+        }
+    }*/
+
+	//-----------------------------------------------------------------------------------------
 	//建立UI界面
 	function init_UI() {
 		toolBar = new THING.widget.ToolBar({
-			width: '70px',
-			position: [130, 1830]
+			width: '100px',
+			position: [130, 1810]
 		});
 		toolBar.data = {
 			zoneCount: false,
