@@ -60,10 +60,10 @@ public class ModelController {
 
         JSONArray jsonArray=JSONArray.fromObject(jsonStr);
         Iterator<Object> iterator=jsonArray.iterator();
-
+        modelService.deleteModels(Integer.parseInt(sceneId));
         while(iterator.hasNext()){
             JSONObject job=(JSONObject)iterator.next();
-            modelService.deleteModels(Integer.parseInt(sceneId));
+
             modelService.addModels((String) job.get("modelAttrUrl"),(String)job.get("modelName"),(Double)job.get("positionX"),(Double)job.get("positionY"),(Double)job.get("positionZ"),Integer.parseInt(sceneId));
         }
         return "success";
