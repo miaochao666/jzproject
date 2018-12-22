@@ -32,7 +32,7 @@
 
 	</div>
 </body>
-<script>
+<script th:inline="javascript">
 	var CABINET_DEFAULT_UNITCOUNT = 42; // 默认机柜u数
 	var RACK_UNIT_HEIGHT = 0.0445; // 1u为4.3厘米
 	var BarGraphColors = ['#0000ff', '#00ffff', '#00ff00', '#ff0000', '#ff00ff', '#ffff00'];
@@ -43,8 +43,8 @@
 
 	var app = new THING.App({
 		container: '3d',
-		url: '/scene/[[${sceneSource}]]',
-        loaderResourceUrl: '/scene/[[${sceneSource}]]'
+		url: '/scene/'+[[${sceneSource}]],
+        loaderResourceUrl: '/scene/'+[[${sceneSource}]]
 	});
 
 
@@ -60,6 +60,7 @@
 
 
 	app.on('load', function (ev) {
+        app.level.change(ev.campus);
 		var floor = app.query('新楼层')[0];
 		app.level.change(floor);
 		app.pauseEvent(THING.EventType.Click, '*', THING.EventTag.LevelBackMethod);
@@ -70,7 +71,7 @@
 			app.level.back();
 		}, 'customLevelBackMethod');
 
-        //createModel();
+        createModel();
 
 		init_UI();
 
@@ -81,7 +82,7 @@
 
 	//-----------------------------------------------------------------------------------------
 	//创建model
-    /*var oldModel=null;
+    var oldModel=null;
     function createModel(){
         var list=[[${list}]];
         if(list.length>0){
@@ -94,7 +95,7 @@
                 });
             }
         }
-    }*/
+    }
 
 	//-----------------------------------------------------------------------------------------
 	//建立UI界面

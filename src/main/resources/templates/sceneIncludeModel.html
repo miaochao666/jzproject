@@ -73,6 +73,7 @@
 
 
             app.on('load', function (ev) {
+                app.level.change(ev.campus);
                 var floor = app.query('新楼层')[0];
                 app.level.change(floor);
                 createModel(id);
