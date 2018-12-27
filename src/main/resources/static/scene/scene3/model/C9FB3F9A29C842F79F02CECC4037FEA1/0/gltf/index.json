@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\C9FB3F9A29C842F79F02CECC4037FEA1_21_转换中\\max\\18000180001800018000室内玻璃隔断墙.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "7254210B3EA18669EEFC476FF8BCA823": "7254210B3EA18669EEFC476FF8BCA823.bin",
+    "B13F60F36A0A14C2937B265C1FF60DD5": "Textures_01.png"
+  },
+  "size": [
+    1.5,
+    0.07894834,
+    3.153923
+  ],
+  "faces": 48,
+  "verts": 44,
+  "nodes": 2,
+  "createTime": "2018-08-14 17:06:04",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}
