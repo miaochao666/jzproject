@@ -26,4 +26,5 @@ public interface ModelMapper extends JpaRepository<Model,Integer> {
     @Transactional
     @Query(value="insert into Model(model_attr_url,model_name,positionX,positionY,positionZ,scene_id) values(?1,?2,?3,?4,?5,?6)",nativeQuery = true)
     int addModel(String modelAttrUrl,String modelName,Double positionX,Double positionY,Double positionZ,Integer sceneId);
+
 }

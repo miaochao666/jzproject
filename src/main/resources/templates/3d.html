@@ -50,18 +50,26 @@
         loaderResourceUrl: './scene/'+[[${sceneSource}]]
     })
     app.on('load', function (ev) {
-
-        app.level.change(ev.campus);
+        //app.level.change(ev.campus);
         var floor=app.query('新楼层')[0];
         app.level.change(floor);
         new THING.widget.Button("保存",save);
         createModel();
+        var createModels=app.query('createModel');
+        createModels.on('dblclick',function () {
+            var pos=this.selfToWorld([0,2.0,2.1])
+            var targ=this.position;
+            targ[1]+=0.95;
+            app.camera.flyTo({
+                time: 1000,
+                position: pos,
+                target: targ,
+            })
+        })
         dragIcon('model1',dragStart);
         dragIcon('model2',dragStart);
         dragIcon('model3',dragStart);
         dragIcon('model4',dragStart);
-        // console.log(app.query("createModel"));
-
     });
 
 
@@ -69,12 +77,11 @@
     app.pauseEvent(THING.EventType.Click,'*',THING.EventTag.LevelBackMethod);
     app.on(THING.EventType.DBLClick,function(ev){
         if(ev.button!=2){
-
             return;
         }
-
         app.level.back();
     });
+
 
     var newModel=null;
     var _preSelThing = false,
@@ -82,6 +89,7 @@
 
     function addControl(obj){
         curObj = obj;
+
         if (!obj.hasControl('axisControl')) {
             obj.addControl(new THING.AxisTransformControl(obj), 'axisControl');
         }
@@ -90,6 +98,15 @@
         }
         _preSelThing = obj;
     }
+
+    app.on('keydown','createModel',function(){
+        if(event.key='Delete'){
+            if(this.hasControl('axisControl')){
+                this.destroy();
+            }
+
+        }
+    })
 
 
     //创建物体并开始拖动
@@ -100,12 +117,13 @@
             type:'Thing',
             name:'createModel',
             url:url,
-            position:app.camera.screenToWorld(x,y)
+            position:app.camera.screenToWorld(x,y),
+
         });
         // console.log(newModel);
         // //防止拖动过程中获取时间坐标的时候，对位置进行重复拾取
         newModel.pickable=false;
-        // //给对象绑定上选择事件
+        // 给对象绑定上选择事件
         // newModel.on('singleclick',function (ev) {
         //     addControl(ev.object);
         // });
@@ -154,9 +172,11 @@
 
 
     });
-    app.on('singleclick','[type=Thing]',function (ev) {
+    app.on('singleclick','[name=createModel]',function (ev) {
         addControl(ev.object);
     });
+
+
 
     var oldModel=null;
     function createModel(){
@@ -168,6 +188,7 @@
                     name:'createModel',
                     url:list[i].modelAttrUrl,
                     position:[list[i].positionX,list[i].positionY,list[i].positionZ],
+                    parent:app.query("新楼层")[0],
                 });
             }
         }

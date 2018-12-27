@@ -1,7 +1,6 @@
 package com.uinnove.jzproject.service;
 
 import com.uinnove.jzproject.domain.entity.Model;
-import com.uinnove.jzproject.domain.entity.Scene;
 
 import java.util.List;
 

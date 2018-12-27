@@ -1,6 +1,7 @@
 package com.uinnove.jzproject.controller;
 
 import com.uinnove.jzproject.domain.entity.Scene;
+import com.uinnove.jzproject.service.ModelService;
 import com.uinnove.jzproject.service.SceneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ public class SceneController {
 
     @Autowired
     private SceneService sceneService;
+
+    @Autowired
+    private ModelService modelService;
 
 
     @RequestMapping("/count")
@@ -64,6 +68,7 @@ public class SceneController {
     @RequestMapping("/cancelScene")
     @ResponseBody
     public Integer cancelScene(Integer sceneId){
+        modelService.deleteModels(sceneId);
          sceneService.delScene(sceneId);
         return 1;
     }

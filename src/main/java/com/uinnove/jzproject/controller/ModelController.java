@@ -56,8 +56,6 @@ public class ModelController {
     public String updateModels(HttpServletRequest request) throws Exception {
         String jsonStr=request.getParameter("params");
         String sceneId=request.getParameter("sceneId");
-
-
         JSONArray jsonArray=JSONArray.fromObject(jsonStr);
         Iterator<Object> iterator=jsonArray.iterator();
         modelService.deleteModels(Integer.parseInt(sceneId));

@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\24E91613E186448C9011ADC7C38F57F7_6_转换中\\max\\18000虹膜识别器.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "5F9FD97033193EFD8A297E5D94FAC865": "5F9FD97033193EFD8A297E5D94FAC865.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "ntexture_01.jpg"
+  },
+  "size": [
+    0.121983,
+    0.05271513,
+    0.121982984
+  ],
+  "faces": 52,
+  "verts": 88,
+  "nodes": 2,
+  "createTime": "2018-08-13 22:02:19",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}

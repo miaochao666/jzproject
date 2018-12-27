@@ -1,0 +1,23 @@
+{
+  "sourceFile": "D:\\work\\6B45C51A0148458A9101BF28A1E0E69A_6_转换中\\max\\18000红外线探测报警器.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "0140DD60447925779203D112337E80E3": "0140DD60447925779203D112337E80E3.bin",
+    "B28D5489BF5A5E96877E1ECF12390F5C": "ntexture_01.jpg"
+  },
+  "size": [
+    0.124634,
+    0.0422545522,
+    0.124634
+  ],
+  "faces": 201,
+  "verts": 346,
+  "nodes": 2,
+  "createTime": "2018-08-14 12:29:17",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(18000, 46, 0)",
+  "version": "2.0"
+}
