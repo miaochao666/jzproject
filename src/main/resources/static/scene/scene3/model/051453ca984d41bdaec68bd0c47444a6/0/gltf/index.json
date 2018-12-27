@@ -1,0 +1,26 @@
+{
+  "sourceFile": "D:\\work\\051453ca984d41bdaec68bd0c47444a6_2_转换中\\max\\18000双开自动门.max",
+  "gltfFiles": [
+    "default.gltf"
+  ],
+  "texFiles": {
+    "961B3C595AC64A5DDD326F9CBDD3C71B": "961B3C595AC64A5DDD326F9CBDD3C71B.bin",
+    "CA84DA8019D9242E8724D81467C577F2": "men05.jpg",
+    "A458F3002E33AE3B1C52E9A4E6122711": "深灰.jpg",
+    "869A2327264B6BC526476BB938C97962": "men04.jpg",
+    "6C3CF82E94F3CA159D9F8271C8A37381": "men03.jpg"
+  },
+  "size": [
+    2.93634081,
+    0.0720658,
+    2.30351567
+  ],
+  "faces": 118,
+  "verts": 178,
+  "nodes": 6,
+  "createTime": "2018-08-13 11:31:46",
+  "author": "1854",
+  "computer": "DHJP-20160806JM",
+  "max": "#(21000, 52, 0)",
+  "version": "2.0"
+}
