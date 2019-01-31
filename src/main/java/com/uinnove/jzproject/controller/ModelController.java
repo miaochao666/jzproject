@@ -42,12 +42,6 @@ public class ModelController {
     @RequestMapping("/enterScene")
     @ResponseBody
     public ModelAndView enterScene(Integer sceneId,ModelAndView modelAndView){
-
-
-
-
-
-
         List<Model> list= modelService.modelList(sceneId);
         Scene scene=sceneService.selectIdAndSource(sceneId);
         modelAndView.addObject("sceneSource",scene.getSceneSource());
