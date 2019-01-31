@@ -64,8 +64,6 @@ public class ModelController {
             modelService.addModels((String) job.get("modelAttrUrl"),(String)job.get("modelName"),(Double)job.get("positionX"),(Double)job.get("positionY"),(Double)job.get("positionZ"),Integer.parseInt(sceneId));
         }
         return "success";
-
-
     }
 
 
